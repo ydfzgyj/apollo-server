@@ -86,8 +86,10 @@ function createHttpServer(server) {
               : JSON.parse(body),
           request: convertNodeHttpToRequest(req),
         })
-          .then(gqlResponse => {
-            res.setHeader('Content-Type', 'application/json');
+          .then(({ gqlResponse, responseInit }) => {
+            Object.keys(responseInit.headers).forEach(key =>
+              res.setHeader(key, responseInit.headers[key]),
+            );
             res.setHeader(
               'Content-Length',
               Buffer.byteLength(gqlResponse, 'utf8').toString(),

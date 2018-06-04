@@ -50,14 +50,15 @@ export function graphqlLambda(
     }
 
     try {
-      gqlResponse = await runHttpQuery([event, lambdaContext], {
+      const result = await runHttpQuery([event, lambdaContext], {
         method: event.httpMethod,
         options: options,
         query: query,
         request: event,
       });
-      headers['Content-Type'] = 'application/json';
-      statusCode = 200;
+      gqlResponse = result.gqlResponse;
+      headers = result.responseInit.headers as Record<string, string>;
+      statusCode = result.responseInit.status;
     } catch (error) {
       if ('HttpQueryError' !== error.name) {
         throw error;
