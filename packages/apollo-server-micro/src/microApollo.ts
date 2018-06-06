@@ -38,7 +38,7 @@ export function microGraphql(
     }
 
     try {
-      const { gqlResponse, responseInit } = await runHttpQuery([req, res], {
+      const { graphqlResponse, responseInit } = await runHttpQuery([req, res], {
         method: req.method,
         options: options,
         query: query,
@@ -47,11 +47,7 @@ export function microGraphql(
       Object.keys(responseInit.headers).forEach(key =>
         res.setHeader(key, responseInit.headers[key]),
       );
-      res.setHeader(
-        'Content-Length',
-        Buffer.byteLength(gqlResponse, 'utf8').toString(),
-      );
-      return gqlResponse;
+      return graphqlResponse;
     } catch (error) {
       if ('HttpQueryError' === error.name) {
         if (error.headers) {

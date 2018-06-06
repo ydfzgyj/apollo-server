@@ -66,11 +66,11 @@ export function graphqlAzureFunctions(
     }
 
     return runHttpQuery([httpContext, request], queryRequest as any)
-      .then(({ gqlResponse, responseInit }) => {
+      .then(({ graphqlResponse, responseInit }) => {
         const result = {
           status: HttpStatusCodes.OK,
           headers: responseInit.headers,
-          body: gqlResponse,
+          body: graphqlResponse,
           isRaw: true,
         };
         httpContext.res = result;

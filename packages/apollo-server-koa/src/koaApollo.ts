@@ -36,15 +36,11 @@ export function graphqlKoa(
         ctx.request.method === 'POST' ? ctx.request.body : ctx.request.query,
       request: convertNodeHttpToRequest(ctx.req),
     }).then(
-      ({ gqlResponse, responseInit }) => {
+      ({ graphqlResponse, responseInit }) => {
         Object.keys(responseInit.headers).forEach(key =>
           ctx.set(key, responseInit.headers[key]),
         );
-        ctx.set(
-          'Content-Length',
-          Buffer.byteLength(gqlResponse, 'utf8').toString(),
-        );
-        ctx.body = gqlResponse;
+        ctx.body = graphqlResponse;
       },
       (error: HttpQueryError) => {
         if ('HttpQueryError' !== error.name) {

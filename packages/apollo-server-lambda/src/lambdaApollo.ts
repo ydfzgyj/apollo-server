@@ -42,7 +42,7 @@ export function graphqlLambda(
     let query =
         event.httpMethod === 'POST' ? event.body : event.queryStringParameters,
       statusCode: number = null,
-      gqlResponse = null,
+      graphqlResponse = null,
       headers: { [headerName: string]: string } = {};
 
     if (query && typeof query === 'string') {
@@ -56,9 +56,9 @@ export function graphqlLambda(
         query: query,
         request: event,
       });
-      gqlResponse = result.gqlResponse;
+      graphqlResponse = result.graphqlResponse;
       headers = result.responseInit.headers as Record<string, string>;
-      statusCode = result.responseInit.status;
+      statusCode = 200;
     } catch (error) {
       if ('HttpQueryError' !== error.name) {
         throw error;
@@ -66,12 +66,12 @@ export function graphqlLambda(
 
       headers = error.headers;
       statusCode = error.statusCode;
-      gqlResponse = error.message;
+      graphqlResponse = error.message;
     } finally {
       callback(null, {
         statusCode: statusCode,
         headers: headers,
-        body: gqlResponse,
+        body: graphqlResponse,
       });
     }
   };
